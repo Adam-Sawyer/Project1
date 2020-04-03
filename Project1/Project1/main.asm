@@ -22,7 +22,7 @@ CHECK_SW1:
 
 CHECK_SW2:
 	SBIC PINA, 1 ; Skip next instruction if PA0 gets a 0
-    RJMP LIM_CHK
+    RJMP SET_LED
     RJMP DEC_CNT
 
 INC_CNT:		 ; Increases the count by the value of the counter
