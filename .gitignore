@@ -6,3 +6,10 @@
 .\Project1\Project1\Debug\Project1.map
 .\Project1\Project1\Debug\Project1.lss
 .\Project1\Project1\Debug\Project1.hex
+*.map
+*.lss
+*.tmp
+*.obj
+*.map
+*.lss
+*.hex

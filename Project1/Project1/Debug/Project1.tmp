@@ -22,6 +22,18 @@
   <FILE>Project1.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <start><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>10</LINE></start>
+  <COUNT_LOOP><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>18</LINE></COUNT_LOOP>
+  <CHECK_SW1><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>23</LINE></CHECK_SW1>
+  <CHECK_SW2><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>28</LINE></CHECK_SW2>
+  <INC_CNT><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>33</LINE></INC_CNT>
+  <LIM_CHK><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>41</LINE></LIM_CHK>
+  <DEC_CNT><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>37</LINE></DEC_CNT>
+  <CHK_VAL><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>47</LINE></CHK_VAL>
+  <AT_MIN><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>54</LINE></AT_MIN>
+  <AT_MAX><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>58</LINE></AT_MAX>
+  <QDELAY><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>65</LINE></QDELAY>
+  <AGAIN3><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>67</LINE></AGAIN3>
+  <AGAIN2><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>68</LINE></AGAIN2>
+  <AGAIN1><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>69</LINE></AGAIN1>
  </LABELS>
 </ASSEMBLER_INFO>
