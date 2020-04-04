@@ -8,6 +8,7 @@
 LDI R16, 0x00 ;Set register 16 to 0 initially. This register will store the current count.
 LDI R17, 0x01 ;Set register 17 to 1 initially. This register will store the increment amount.
 LDI R18, 0xFF
+LDI R20, 0x05 ;Set register 20 to 5 initially. This register will count the change in increment amount.
 
 OUT DDRD, R18 ;Port D in output mode
 OUT PORTD, R18 ;Turn off LEDS (active low)
@@ -22,8 +23,13 @@ CHECK_SW1:
 
 CHECK_SW2:
 	SBIC PINA, 1 ; Skip next instruction if PA0 gets a 0
-    RJMP SET_LED
+    RJMP CHECK_SW3
     RJMP DEC_CNT
+    
+CHECK_SW3:
+	SBIC PINA, 2 ; Skip next instruction if PA2 gets a 0
+	RJMP CHG_INC
+	RJMP SET_LED
 
 INC_CNT:		 ; Increases the count by the value of the counter
 	ADD R16, R17
@@ -39,6 +45,17 @@ CHK_VAL:		 ; Checks if max value has been reached
 	SBIS PIND, 5
 	RJMP AT_MAX
 	RJMP SET_LED
+	
+CHG_INC:		; Increments the increment value by 1 or resets to 1
+	INC R17
+	DEC R20
+	BREQ RESET
+	RJMP SET_LED
+	
+	RESET:		; Resets the increment value to 1 and count to 5
+		LDI R20, 0x05
+		LDI R17, 0x01
+		RJMP SET_LED
 
 SET_LED:	       ; Turns on the LEDs according to value stored in R16 (The count register) 
 	MOV R18, R16   ; R18 is used as a temporary register to store the count value
