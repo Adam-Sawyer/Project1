@@ -1,18 +1,18 @@
 <ASSEMBLER_INFO>
  <VERSION>2.2.7</VERSION>
  <DEVICE>"ATmega324PB"</DEVICE>
- <WORKING_DIR>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\Debug</WORKING_DIR>
+ <WORKING_DIR>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\Debug</WORKING_DIR>
  <INCLUDE_PATH>
   <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\avrasm\inc</DIR>
   <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
   <DIR></DIR>
  </INCLUDE_PATH>
- <SOURCE_FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</SOURCE_FILE>
+ <SOURCE_FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</SOURCE_FILE>
  <INCLUDED_FILES>
   <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\avrasm\inc\m324PBdef.inc</FILE>
  </INCLUDED_FILES>
  <OBJECT_FILES>
-  <FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\Debug\Project1.obj</FILE>
+  <FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\Debug\Project1.obj</FILE>
  </OBJECT_FILES>
  <HEX_FILES>
   <FILE>Project1.hex</FILE>
@@ -22,18 +22,25 @@
   <FILE>Project1.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <COUNT_LOOP><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>18</LINE></COUNT_LOOP>
-  <CHECK_SW1><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>23</LINE></CHECK_SW1>
-  <CHECK_SW2><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>28</LINE></CHECK_SW2>
-  <INC_CNT><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>33</LINE></INC_CNT>
-  <LIM_CHK><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>41</LINE></LIM_CHK>
-  <DEC_CNT><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>37</LINE></DEC_CNT>
-  <CHK_VAL><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>47</LINE></CHK_VAL>
-  <AT_MIN><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>54</LINE></AT_MIN>
-  <AT_MAX><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>58</LINE></AT_MAX>
-  <QDELAY><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>65</LINE></QDELAY>
-  <AGAIN3><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>67</LINE></AGAIN3>
-  <AGAIN2><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>68</LINE></AGAIN2>
-  <AGAIN1><FILE>C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm</FILE><LINE>69</LINE></AGAIN1>
+  <SET_INIT_VAL><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>23</LINE></SET_INIT_VAL>
+  <RETRY><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>25</LINE></RETRY>
+  <QDELAY><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>107</LINE></QDELAY>
+  <CHECK_SW1><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>41</LINE></CHECK_SW1>
+  <SET_LED2><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>35</LINE></SET_LED2>
+  <CHECK_SW2><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>46</LINE></CHECK_SW2>
+  <INC_CNT><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>56</LINE></INC_CNT>
+  <CHECK_SW3><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>51</LINE></CHECK_SW3>
+  <DEC_CNT><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>60</LINE></DEC_CNT>
+  <CHG_INC><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>71</LINE></CHG_INC>
+  <SET_LED><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>82</LINE></SET_LED>
+  <CHK_VAL><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>64</LINE></CHK_VAL>
+  <AT_MIN><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>88</LINE></AT_MIN>
+  <AT_MAX><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>92</LINE></AT_MAX>
+  <RESET><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>77</LINE></RESET>
+  <SYS_ALRM><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>96</LINE></SYS_ALRM>
+  <LOOP1><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>98</LINE></LOOP1>
+  <AGAIN3><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>109</LINE></AGAIN3>
+  <AGAIN2><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>110</LINE></AGAIN2>
+  <AGAIN1><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>111</LINE></AGAIN1>
  </LABELS>
 </ASSEMBLER_INFO>

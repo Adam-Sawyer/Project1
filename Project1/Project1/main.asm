@@ -8,21 +8,43 @@
 LDI R16, 0x00 ;Set register 16 to 0 initially. This register will store the current count.
 LDI R17, 0x01 ;Set register 17 to 1 initially. This register will store the increment amount.
 LDI R18, 0xFF
+LDI R19, 0x00
 LDI R20, 0x05 ;Set register 20 to 5 initially. This register will count the change in increment amount.
+LDI R21, 0x00 ;Set register 22 to 0 initially. This register will hold the initial value
 
 OUT DDRD, R18 ;Port D in output mode
 OUT PORTD, R18 ;Turn off LEDS (active low)
 
+OUT DDRE, R18 ;Port E in output mode
+
 OUT DDRA, R19 ; Port A in input mode
 OUT PORTA, R18
-	 
+
+SET_INIT_VAL:
+	LDI R22, 100           ;Load a counter variable to limit initialization time
+    RETRY: RJMP QDELAY     
+		   DEC R22         ;Decrement time
+		   BRNE CHECK_SW1
+		   SBIC PINA, 2    ;checks to see if button is pressed
+	       RJMP RETRY
+	INC R21                ;increments initial value if button is pressed
+	DEC R22                ;Decrement time
+	BRNE CHECK_SW1
+	RJMP SET_LED2          ;displays new value to LEDs
+
+SET_LED2:	       ; Turns on the LEDs according to value stored in R22 (The initial val register) 
+	MOV R18, R21   ; R18 is used as a temporary register to store the count value
+	COM R18        ; Takes Ones compliment because LEDs are active low
+	OUT PORTD, R18 ; Turns LEDs on 
+	RJMP RETRY
+		 
 CHECK_SW1:
     SBIC PINA, 0 ; Skip next instruction if PA0 gets a 0
     RJMP CHECK_SW2
     RJMP INC_CNT
 
 CHECK_SW2:
-	SBIC PINA, 1 ; Skip next instruction if PA0 gets a 0
+	SBIC PINA, 1 ; Skip next instruction if PA1 gets a 0
     RJMP CHECK_SW3
     RJMP DEC_CNT
     
@@ -65,14 +87,21 @@ SET_LED:	       ; Turns on the LEDs according to value stored in R16 (The count 
 
 AT_MIN:			 ; Sets value of counter to 31
 	LDI R16, 0x1F
-	;RJMP SYS_ALRM
+	RJMP SYS_ALRM
 
 AT_MAX:			 ; Sets value of counter to 0
 	LDI R16, 0x00
-	;RJMP SYS_ALRM
+	RJMP SYS_ALRM
 
 SYS_ALRM:		 ; Sets off the system alarm
-	RJMP CHECK_SW1
+	LDI R21, 50
+	LOOP1: OUT PORTE, R18
+		   RJMP QDELAY
+	       OUT PORTE, R19
+	       RJMP QDELAY
+	       DEC R21
+	       BRNE CHECK_SW1
+	       RJMP LOOP1
 	
 
 QDELAY: 

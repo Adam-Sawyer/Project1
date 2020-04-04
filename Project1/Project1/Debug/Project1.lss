@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.7  C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\main.asm Fri Apr 03 18:26:00 2020
+AVRASM ver. 2.2.7  C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm Fri Apr 03 21:27:33 2020
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\avrasm\inc\m324PBdef.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\avrasm\inc\m324PBdef.inc'
@@ -1628,71 +1628,113 @@ AVRASM ver. 2.2.7  C:\Users\Adam\Desktop\Project 1\Project1\Project1\Project1\ma
 000000 e000                      LDI R16, 0x00 ;Set register 16 to 0 initially. This register will store the current count.
 000001 e011                      LDI R17, 0x01 ;Set register 17 to 1 initially. This register will store the increment amount.
 000002 ef2f                      LDI R18, 0xFF
+000003 e030                      LDI R19, 0x00
+000004 e045                      LDI R20, 0x05 ;Set register 20 to 5 initially. This register will count the change in increment amount.
+000005 e050                      LDI R21, 0x00 ;Set register 22 to 0 initially. This register will hold the initial value
                                  
-000003 b92a                      OUT DDRD, R18 ;Port D in output mode
-000004 b92b                      OUT PORTD, R18 ;Turn off LEDS (active low)
+000006 b92a                      OUT DDRD, R18 ;Port D in output mode
+000007 b92b                      OUT PORTD, R18 ;Turn off LEDS (active low)
                                  
-000005 b931                      OUT DDRA, R19 ; Port A in input mode
-000006 b922                      OUT PORTA, R18
-                                  
-                                 COUNT_LOOP:
-000007 2f02                      	MOV R16, R18
-000008 9520                      	COM R18
-000009 b92b                      	OUT PORTD, R18
-                                 	 
+000008 b92d                      OUT DDRE, R18 ;Port E in output mode
+                                 
+000009 b931                      OUT DDRA, R19 ; Port A in input mode
+00000a b922                      OUT PORTA, R18
+                                 
+                                 SET_INIT_VAL:
+00000b e664                      	LDI R22, 100           ;Load a counter variable to limit initialization time
+00000c c035                          RETRY: RJMP QDELAY     
+00000d 956a                      		   DEC R22         ;Decrement time
+00000e f451                      		   BRNE CHECK_SW1
+00000f 9902                      		   SBIC PINA, 2    ;checks to see if button is pressed
+000010 cffb                      	       RJMP RETRY
+000011 9553                      	INC R21                ;increments initial value if button is pressed
+000012 956a                      	DEC R22                ;Decrement time
+000013 f429                      	BRNE CHECK_SW1
+000014 c000                      	RJMP SET_LED2          ;displays new value to LEDs
+                                 
+                                 SET_LED2:	       ; Turns on the LEDs according to value stored in R22 (The initial val register) 
+000015 2f25                      	MOV R18, R21   ; R18 is used as a temporary register to store the count value
+000016 9520                      	COM R18        ; Takes Ones compliment because LEDs are active low
+000017 b92b                      	OUT PORTD, R18 ; Turns LEDs on 
+000018 cff3                      	RJMP RETRY
+                                 		 
                                  CHECK_SW1:
-00000a 9900                          SBIC PINA, 0 ; Skip next instruction if PA0 gets a 0
-00000b c001                          RJMP CHECK_SW2
-00000c c003                          RJMP INC_CNT
+000019 9900                          SBIC PINA, 0 ; Skip next instruction if PA0 gets a 0
+00001a c001                          RJMP CHECK_SW2
+00001b c006                          RJMP INC_CNT
                                  
                                  CHECK_SW2:
-00000d 9901                      	SBIC PINA, 1 ; Skip next instruction if PA0 gets a 0
-00000e c005                          RJMP LIM_CHK
-00000f c002                          RJMP DEC_CNT
+00001c 9901                      	SBIC PINA, 1 ; Skip next instruction if PA1 gets a 0
+00001d c001                          RJMP CHECK_SW3
+00001e c005                          RJMP DEC_CNT
+                                     
+                                 CHECK_SW3:
+00001f 9902                      	SBIC PINA, 2 ; Skip next instruction if PA2 gets a 0
+000020 c00a                      	RJMP CHG_INC
+000021 c010                      	RJMP SET_LED
                                  
-                                 INC_CNT:
-000010 0f01                      	ADD R16, R17
-000011 c002                      	RJMP LIM_CHK
+                                 INC_CNT:		 ; Increases the count by the value of the counter
+000022 0f01                      	ADD R16, R17
+000023 c002                      	RJMP CHK_VAL
                                  
-                                 DEC_CNT:
-000012 1b01                      	SUB R16, R17
-000013 c000                      	RJMP LIM_CHK
+                                 DEC_CNT:		 ; Decreases the count by the value of the counter
+000024 1b01                      	SUB R16, R17
+000025 c000                      	RJMP CHK_VAL
                                  
-                                 LIM_CHK:
-000014 2f20                      	MOV R18, R16
-000015 9520                      	COM R18
-000016 b92b                      	OUT PORTD, R18
-000017 c000                      	RJMP CHK_VAL
+                                 CHK_VAL:		 ; Checks if max value has been reached
+000026 9b4f                      	SBIS PIND, 7
+000027 c00e                      	RJMP AT_MIN
+000028 9b4d                      	SBIS PIND, 5
+000029 c00e                      	RJMP AT_MAX
+00002a c007                      	RJMP SET_LED
+                                 	
+                                 CHG_INC:		; Increments the increment value by 1 or resets to 1
+00002b 9513                      	INC R17
+00002c 954a                      	DEC R20
+00002d f009                      	BREQ RESET
+00002e c003                      	RJMP SET_LED
+                                 	
+                                 	RESET:		; Resets the increment value to 1 and count to 5
+00002f e045                      		LDI R20, 0x05
+000030 e011                      		LDI R17, 0x01
+000031 c000                      		RJMP SET_LED
                                  
-                                 CHK_VAL:
-000018 9b4f                      	SBIS PIND, 7
-000019 c003                      	RJMP AT_MIN
-00001a 9b4d                      	SBIS PIND, 5
-00001b c002                      	RJMP AT_MAX
-00001c cfed                      	RJMP CHECK_SW1
+                                 SET_LED:	       ; Turns on the LEDs according to value stored in R16 (The count register) 
+000032 2f20                      	MOV R18, R16   ; R18 is used as a temporary register to store the count value
+000033 9520                      	COM R18        ; Takes Ones compliment because LEDs are active low
+000034 b92b                      	OUT PORTD, R18 ; Turns LEDs on 
+000035 cfe3                      	RJMP CHECK_SW1
                                  
-                                 AT_MIN:
-00001d e10f                      	LDI R16, 0x1F
-                                 	;RJMP SYS_ALRM
+                                 AT_MIN:			 ; Sets value of counter to 31
+000036 e10f                      	LDI R16, 0x1F
+000037 c002                      	RJMP SYS_ALRM
                                  
-                                 AT_MAX:
-00001e e000                      	LDI R16, 0x00
-                                 	;RJMP SYS_ALRM
+                                 AT_MAX:			 ; Sets value of counter to 0
+000038 e000                      	LDI R16, 0x00
+000039 c000                      	RJMP SYS_ALRM
                                  
-00001f cfea                      RJMP CHECK_SW1
+                                 SYS_ALRM:		 ; Sets off the system alarm
+00003a e352                      	LDI R21, 50
+00003b b92e                      	LOOP1: OUT PORTE, R18
+00003c c005                      		   RJMP QDELAY
+00003d b93e                      	       OUT PORTE, R19
+00003e c003                      	       RJMP QDELAY
+00003f 955a                      	       DEC R21
+000040 f6c1                      	       BRNE CHECK_SW1
+000041 cff9                      	       RJMP LOOP1
                                  	
                                  
                                  QDELAY: 
-000020 ef7f                      	LDI R23, 255
-000021 ef6f                      	AGAIN3: LDI R22, 255
-000022 e159                      			AGAIN2:LDI R21, 25 
-000023 0000                      				AGAIN1:NOP 
-000024 955a                      					   DEC R21 
-000025 f7e9                      					   BRNE AGAIN1          
-000026 956a                      				DEC R22
-000027 f7d1                      				BRNE AGAIN2
-000028 957a                      			DEC R23
-000029 f7b9                      			BRNE AGAIN3
+000042 ef7f                      	LDI R23, 255
+000043 ef6f                      	AGAIN3: LDI R22, 255
+000044 e159                      			AGAIN2:LDI R21, 25 
+000045 0000                      				AGAIN1:NOP 
+000046 955a                      					   DEC R21 
+000047 f7e9                      					   BRNE AGAIN1          
+000048 956a                      				DEC R22
+000049 f7d1                      				BRNE AGAIN2
+00004a 957a                      			DEC R23
+00004b f7b9                      			BRNE AGAIN3
 
 
 RESOURCE USE INFORMATION
@@ -1712,37 +1754,37 @@ counted separately from r26..r31 here.
 "ATmega324PB" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:   7 r17:   3 r18:  10 r19:   1 r20:   0 
-r21:   2 r22:   2 r23:   2 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
+r13:   0 r14:   0 r15:   0 r16:   6 r17:   5 r18:  12 r19:   3 r20:   3 
+r21:   7 r22:   5 r23:   2 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
 r29:   0 r30:   0 r31:   0 
-Registers used: 7 out of 35 (20.0%)
+Registers used: 8 out of 35 (22.9%)
 
 "ATmega324PB" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   0 add   :   1 adiw  :   0 and   :   0 
 andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
-brcc  :   0 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
+brcc  :   0 brcs  :   0 break :   0 breq  :   1 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
-brne  :   3 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
+brne  :   6 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
 brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   0 cbr   :   0 
 clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   0 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   2 cp    :   0 cpc   :   0 
-cpi   :   0 cpse  :   0 dec   :   3 eor   :   0 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   0 jmp   :   0 
-ld    :   0 ldd   :   0 ldi   :   8 lds   :   0 lpm   :   0 lsl   :   0 
+cpi   :   0 cpse  :   0 dec   :   7 eor   :   0 fmul  :   0 fmuls :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   2 jmp   :   0 
+ld    :   0 ldd   :   0 ldi   :  15 lds   :   0 lpm   :   0 lsl   :   0 
 lsr   :   0 mov   :   2 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   1 or    :   0 ori   :   0 out   :   6 pop   :   0 
-push  :   0 rcall :   0 ret   :   0 reti  :   0 rjmp  :  11 rol   :   0 
-ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   2 sbis  :   2 
+neg   :   0 nop   :   1 or    :   0 ori   :   0 out   :   9 pop   :   0 
+push  :   0 rcall :   0 ret   :   0 reti  :   0 rjmp  :  23 rol   :   0 
+ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   4 sbis  :   2 
 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   0 seh   :   0 
 sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   0 
 sub   :   1 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 12 out of 113 (10.6%)
+Instructions used: 14 out of 113 (12.4%)
 
 "ATmega324PB" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000054     84      0     84   32768   0.3%
+[.cseg] 0x000000 0x000098    152      0    152   32768   0.5%
 [.dseg] 0x000100 0x000100      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
