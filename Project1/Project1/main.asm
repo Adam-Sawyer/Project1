@@ -78,14 +78,6 @@ MAIN:
 		CALL STOPWATCH_MODE
 		RJMP MAIN
 
-	;;;;;;;;;;;;;;;;;;;;;;;;;;;;; CALL CUSTOM FUNCTIONS HERE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-	;CHECK_CUSTOM1
-		;CALL CUSTOM1
-
-	;CHECK_CUSTOM2
-		;CALL CUSTOM2
-
 	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	COUNT_MAX:
@@ -120,8 +112,8 @@ DEC_CNT:		 ; Decreases the count by the value of the counter
 	ADD R16, R18
 	CLC
 	RET
-
-SET_LEDS:	       ; Turns on the LEDs according to value stored in R16 (The count register) ; Turns on the LEDs according to value stored in R22 (The initial val register)
+					; Turns on the LEDs according to value stored in R22 (The initial val register)
+SET_LEDS:	       ; Turns on the LEDs according to value stored in R16 (The count register) 
 	MOV R27, R16   ; R18 is used as a temporary register to store the count value
 	COM R27        ; Takes Ones compliment because LEDs are active low
 	OUT PORTD, R27 ; Turns LEDs on
