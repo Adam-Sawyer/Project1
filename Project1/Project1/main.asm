@@ -10,7 +10,7 @@ LDI R17, 0x01 ;Set register 17 to 1 initially. This register will store the incr
 LDI R18, 0xFF
 LDI R19, 0x00
 LDI R20, 0x05 ;Set register 20 to 5 initially. This register will count the change in increment amount.
-LDI R21, 0x00 ;Set register 22 to 0 initially. This register will hold the initial value
+LDI R21, 0x00 ;Set register 21 to 0 initially. This register will hold the initial value
 LDI R26, 0x1F
 
 OUT DDRD, R18 ;Port D in output mode
@@ -25,16 +25,16 @@ INIT:
 	CALL SET_INIT_VAL
 	CALL SET_LEDS
 	WAIT_UNTIL_REL0: ; Waits until release of button to continue
-		SBIS PINA, 4 ; Skip next instruction if PA3 gets a 0
+		SBIS PINA, 4 ; Skip next instruction if button6 gets a 0
 		RJMP WAIT_UNTIL_REL0
 	WAIT_UNTIL_REL00: ; Waits until release of button to continue
-		SBIS PINA, 2 ; Skip next instruction if PA2 gets a 0
+		SBIS PINA, 2 ; Skip next instruction if button3 gets a 0
 		RJMP WAIT_UNTIL_REL00
 	CALL QDELAY
 
 MAIN:
 	CHECK_UP:
-		SBIC PINA, 5 ; Skip next instruction if PA0 gets a 0
+		SBIC PINA, 5 ; Skip next instruction if button7 gets a 0
 		RJMP CHECK_DOWN
 		CP R16, R26
 		BREQ COUNT_MAX
@@ -44,7 +44,7 @@ MAIN:
 		RJMP MAIN
 
 	CHECK_DOWN:
-		SBIC PINA, 6 ; Skip next instruction if PA1 gets a 0
+		SBIC PINA, 6 ; Skip next instruction if button8 gets a 0
 		RJMP CHECK_RESET
 		CP R19, R16
 		BREQ COUNT_MIN
@@ -54,7 +54,7 @@ MAIN:
 		RJMP MAIN
 
 	CHECK_RESET:
-		SBIC PINA, 4 ; Skip next instruction if PA2 gets a 0
+		SBIC PINA, 4 ; Skip next instruction if button6 gets a 0
 		RJMP CHECK_CHG_INC
 		CALL RESET_COUNT
 		CALL SET_LEDS
@@ -62,17 +62,17 @@ MAIN:
 		RJMP MAIN
 
 	CHECK_CHG_INC:
-		SBIC PINA, 2 ; Skip next instruction if PA2 gets a 0
+		SBIC PINA, 2 ; Skip next instruction if button3 gets a 0
 		RJMP CHECK_STOPWATCH_MODE
 		CALL CHG_INC
 		CALL QDELAY
 		RJMP MAIN
 
 	CHECK_STOPWATCH_MODE:
-		SBIC PINA, 7 ; Skip next instruction if PA2 gets a 0
+		SBIC PINA, 7 ; Skip next instruction if button9 gets a 0
 		RJMP MAIN
 		WAIT_UNTIL_REL:
-			SBIS PINA, 7 ; Skip next instruction if PA2 gets a 0
+			SBIS PINA, 7 ; Skip next instruction if button9 gets a 0
 			RJMP WAIT_UNTIL_REL
 		CALL QDELAY
 		CALL STOPWATCH_MODE
@@ -114,7 +114,7 @@ DEC_CNT:		 ; Decreases the count by the value of the counter
 	RET
 					; Turns on the LEDs according to value stored in R22 (The initial val register)
 SET_LEDS:	       ; Turns on the LEDs according to value stored in R16 (The count register) 
-	MOV R27, R16   ; R18 is used as a temporary register to store the count value
+	MOV R27, R16   ; R27 is used as a temporary register to store the count value
 	COM R27        ; Takes Ones compliment because LEDs are active low
 	OUT PORTD, R27 ; Turns LEDs on
 	RET
@@ -155,10 +155,10 @@ STOPWATCH_MODE:
 	CALL SET_LEDS
 	CBI PORTD, 7 ;
 	UP:
-		SBIC PINA, 5 ; Skip next instruction if PA0 gets a 0
+		SBIC PINA, 5 ; Skip next instruction if button7 gets a 0
 		RJMP DOWN
 		WAIT_UNTIL_REL1:
-			SBIS PINA, 5 ; Skip next instruction if PA2 gets a 0
+			SBIS PINA, 5 ; Skip next instruction if button7 gets a 0
 			RJMP WAIT_UNTIL_REL1
 		L1:
 			CP R16, R26
@@ -167,15 +167,15 @@ STOPWATCH_MODE:
 			CALL SET_LEDS
 			CBI PORTD, 7 ; LED 6 already being used
 			CALL QDELAY
-			SBIC PINA, 5 ; Skip next instruction if PA0 gets a 0
+			SBIC PINA, 5 ; Skip next instruction if button7 gets a 0
 			RJMP L1
 			RJMP WAIT
 
 	DOWN:
-		SBIC PINA, 6 ; Skip next instruction if PA1 gets a 0
+		SBIC PINA, 6 ; Skip next instruction if button8 gets a 0
 		RJMP STOP_RESET
 		WAIT_UNTIL_REL2:
-			SBIS PINA, 6 ; Skip next instruction if PA2 gets a 0
+			SBIS PINA, 6 ; Skip next instruction if button8 gets a 0
 			RJMP WAIT_UNTIL_REL2
 		L2:
 			CP R19, R16
@@ -184,13 +184,13 @@ STOPWATCH_MODE:
 			CALL SET_LEDS
 			CBI PORTD, 7 ; LED 6 already being used
 			CALL QDELAY
-			SBIC PINA, 6 ; Skip next instruction if PA1 gets a 0
+			SBIC PINA, 6 ; Skip next instruction if button8 gets a 0
 			RJMP L2
 			RJMP WAIT
 
 	STOP_RESET:
 		CBI PORTD, 7 ; LED 6 already being used
-		SBIC PINA, 4 ; Skip next instruction if PA2 gets a 0
+		SBIC PINA, 4 ; Skip next instruction if button6 gets a 0
 		RJMP EXIT_STOPWATCH
 		CALL RESET_COUNT
 		CALL SET_LEDS
@@ -201,10 +201,10 @@ STOPWATCH_MODE:
 		CALL QDELAY
 
 	EXIT_STOPWATCH:
-		SBIC PINA, 7 ; Skip next instruction if PA2 gets a 0
+		SBIC PINA, 7 ; Skip next instruction if button9 gets a 0
 		RJMP UP
 		WAIT_UNTIL_REL3:
-			SBIS PINA, 7 ; Skip next instruction if PA2 gets a 0
+			SBIS PINA, 7 ; Skip next instruction if button9 gets a 0
 			RJMP WAIT_UNTIL_REL3
 		SBI PORTD, 7 ; LRF1 TURNED OFF
 		CALL QDELAY
