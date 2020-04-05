@@ -22,11 +22,11 @@ OUT DDRA, R19 ; Port A in input mode
 OUT PORTA, R18 ; enable pull-ups on PA
 
 INIT:
+	WAIT_UNTIL_REL0: ; Waits until release of button to continue
+		SBIS PINA, 4 ; Skip next instruction if PA3 gets a 0
+		RJMP WAIT_UNTIL_REL0
 	CALL SET_INIT_VAL
 	CALL SET_LEDS
-	WAIT_UNTIL_REL0: ; Waits until release of button to continue
-		SBIS PINA, 4 ; Skip next instruction if PA2 gets a 0
-		RJMP WAIT_UNTIL_REL0
 	CALL QDELAY
 
 MAIN:
@@ -131,31 +131,9 @@ SYS_ALARM:		 ; Sets off the system alarm
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; CALL CUSTOM FUNCTIONS HERE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 SET_INIT_VAL:
-	IN R16, PINA;
-	COM R16
+	IN R21, PINA 
+	MOV R16, R21   ;Copy initial value to counter
 	RET
-
-	;; ----- EVERTHING ELSE IN THIS FUNCTION BELOW LOOKS LIKE IT CAN BE DELETE -----
-
-	;LDI R22, 100           ;Load a counter variable to limit initialization time
-    ;RETRY: RJMP QDELAY     
-		   ;DEC R22         ;Decrement time
-		   ;BRNE CHECK_SW1
-		   ;SBIC PINA, 7    ;checks to see if button is pressed
-	       ;RJMP RETRY
-	;INC R21                ;increments initial value if button is pressed
-	;DEC R22                ;Decrement time
-	;BRNE CHECK_SW1
-	;CALL SET_LEDS          ;displays new value to LEDs
-	;RET
-
-;SET_LED2:	       ; Turns on the LEDs according to value stored in R22 (The initial val register) 
-;	MOV R18, R21   ; R18 is used as a temporary register to store the count value
-;	COM R18        ; Takes Ones compliment because LEDs are active low
-;	OUT PORTD, R18 ; Turns LEDs on 
-;	RJMP RETRY
-
-;; ---------------------------------------------------------------------------------
 	
 CHG_INC:		; Increments the increment value by 1 or resets to 1
 	INC R17

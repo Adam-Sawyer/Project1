@@ -22,25 +22,40 @@
   <FILE>Project1.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <SET_INIT_VAL><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>23</LINE></SET_INIT_VAL>
-  <RETRY><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>25</LINE></RETRY>
-  <QDELAY><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>107</LINE></QDELAY>
-  <CHECK_SW1><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>41</LINE></CHECK_SW1>
-  <SET_LED2><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>35</LINE></SET_LED2>
-  <CHECK_SW2><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>46</LINE></CHECK_SW2>
-  <INC_CNT><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>56</LINE></INC_CNT>
-  <CHECK_SW3><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>51</LINE></CHECK_SW3>
-  <DEC_CNT><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>60</LINE></DEC_CNT>
-  <CHG_INC><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>71</LINE></CHG_INC>
-  <SET_LED><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>82</LINE></SET_LED>
-  <CHK_VAL><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>64</LINE></CHK_VAL>
-  <AT_MIN><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>88</LINE></AT_MIN>
-  <AT_MAX><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>92</LINE></AT_MAX>
-  <RESET><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>77</LINE></RESET>
-  <SYS_ALRM><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>96</LINE></SYS_ALRM>
-  <LOOP1><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>98</LINE></LOOP1>
-  <AGAIN3><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>109</LINE></AGAIN3>
-  <AGAIN2><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>110</LINE></AGAIN2>
-  <AGAIN1><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>111</LINE></AGAIN1>
+  <INIT><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>24</LINE></INIT>
+  <WAIT_UNTIL_REL0><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>25</LINE></WAIT_UNTIL_REL0>
+  <SET_INIT_VAL><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>133</LINE></SET_INIT_VAL>
+  <SET_LEDS><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>114</LINE></SET_LEDS>
+  <QDELAY><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>212</LINE></QDELAY>
+  <MAIN><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>32</LINE></MAIN>
+  <CHECK_UP><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>33</LINE></CHECK_UP>
+  <CHECK_DOWN><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>43</LINE></CHECK_DOWN>
+  <COUNT_MAX><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>81</LINE></COUNT_MAX>
+  <INC_CNT><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>105</LINE></INC_CNT>
+  <CHECK_RESET><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>53</LINE></CHECK_RESET>
+  <COUNT_MIN><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>88</LINE></COUNT_MIN>
+  <DEC_CNT><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>109</LINE></DEC_CNT>
+  <CHECK_STOPWATCH_MODE><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>61</LINE></CHECK_STOPWATCH_MODE>
+  <RESET_COUNT><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>97</LINE></RESET_COUNT>
+  <WAIT_UNTIL_REL><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>64</LINE></WAIT_UNTIL_REL>
+  <STOPWATCH_MODE><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>151</LINE></STOPWATCH_MODE>
+  <SYS_ALARM><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>120</LINE></SYS_ALARM>
+  <SET_COUNT><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>101</LINE></SET_COUNT>
+  <LOOP1><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>122</LINE></LOOP1>
+  <CHG_INC><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>138</LINE></CHG_INC>
+  <RESET2><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>145</LINE></RESET2>
+  <UP><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>155</LINE></UP>
+  <DOWN><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>172</LINE></DOWN>
+  <WAIT_UNTIL_REL1><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>158</LINE></WAIT_UNTIL_REL1>
+  <L1><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>161</LINE></L1>
+  <STOP_RESET><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>189</LINE></STOP_RESET>
+  <WAIT><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>197</LINE></WAIT>
+  <WAIT_UNTIL_REL2><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>175</LINE></WAIT_UNTIL_REL2>
+  <L2><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>178</LINE></L2>
+  <EXIT_STOPWATCH><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>201</LINE></EXIT_STOPWATCH>
+  <WAIT_UNTIL_REL3><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>204</LINE></WAIT_UNTIL_REL3>
+  <AGAIN3><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>214</LINE></AGAIN3>
+  <AGAIN2><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>216</LINE></AGAIN2>
+  <AGAIN1><FILE>C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm</FILE><LINE>218</LINE></AGAIN1>
  </LABELS>
 </ASSEMBLER_INFO>
