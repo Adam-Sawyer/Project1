@@ -22,14 +22,14 @@ OUT DDRA, R19 ; Port A in input mode
 OUT PORTA, R18 ; enable pull-ups on PA
 
 INIT:
+	CALL SET_INIT_VAL
+	CALL SET_LEDS
 	WAIT_UNTIL_REL0: ; Waits until release of button to continue
 		SBIS PINA, 4 ; Skip next instruction if PA3 gets a 0
 		RJMP WAIT_UNTIL_REL0
 	WAIT_UNTIL_REL00: ; Waits until release of button to continue
 		SBIS PINA, 2 ; Skip next instruction if PA2 gets a 0
 		RJMP WAIT_UNTIL_REL00
-	CALL SET_INIT_VAL
-	CALL SET_LEDS
 	CALL QDELAY
 
 MAIN:
@@ -141,8 +141,8 @@ SYS_ALARM:		 ; Sets off the system alarm
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; CALL CUSTOM FUNCTIONS HERE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 SET_INIT_VAL:
-	IN R21, PINA
-	MOV R16, R21   ;Copy initial value to counter
+	IN R16, PINA
+	COM R16 ; becuase switches are active low
 	RET
 
 CHG_INC:		; Increments the increment value by 1 or resets to 1
