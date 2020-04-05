@@ -22,14 +22,14 @@ OUT DDRA, R19 ; Port A in input mode
 OUT PORTA, R18 ; enable pull-ups on PA
 
 INIT:
-	CALL SET_INIT_VAL
-	CALL SET_LEDS
 	WAIT_UNTIL_REL0: ; Waits until release of button to continue
-		SBIS PINA, 4 ; Skip next instruction if PA2 gets a 0
+		SBIS PINA, 4 ; Skip next instruction if PA3 gets a 0
 		RJMP WAIT_UNTIL_REL0
 	WAIT_UNTIL_REL00: ; Waits until release of button to continue
 		SBIS PINA, 2 ; Skip next instruction if PA2 gets a 0
 		RJMP WAIT_UNTIL_REL00
+	CALL SET_INIT_VAL
+	CALL SET_LEDS
 	CALL QDELAY
 
 MAIN:
@@ -52,7 +52,7 @@ MAIN:
 		CALL SET_LEDS
 		CALL QDELAY
 		RJMP MAIN
-    
+
 	CHECK_RESET:
 		SBIC PINA, 4 ; Skip next instruction if PA2 gets a 0
 		RJMP CHECK_CHG_INC
@@ -101,7 +101,7 @@ MAIN:
 		CALL SYS_ALARM
 		CALL QDELAY
 		RJMP MAIN
-		
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; COMMON FUNCTIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 RESET_COUNT:
@@ -121,10 +121,10 @@ DEC_CNT:		 ; Decreases the count by the value of the counter
 	CLC
 	RET
 
-SET_LEDS:	       ; Turns on the LEDs according to value stored in R16 (The count register) ; Turns on the LEDs according to value stored in R22 (The initial val register) 
+SET_LEDS:	       ; Turns on the LEDs according to value stored in R16 (The count register) ; Turns on the LEDs according to value stored in R22 (The initial val register)
 	MOV R27, R16   ; R18 is used as a temporary register to store the count value
 	COM R27        ; Takes Ones compliment because LEDs are active low
-	OUT PORTD, R27 ; Turns LEDs on 
+	OUT PORTD, R27 ; Turns LEDs on
 	RET
 
 SYS_ALARM:		 ; Sets off the system alarm
@@ -141,39 +141,17 @@ SYS_ALARM:		 ; Sets off the system alarm
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; CALL CUSTOM FUNCTIONS HERE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 SET_INIT_VAL:
-	IN R16, PINA;
-	COM R16
+	IN R21, PINA
+	MOV R16, R21   ;Copy initial value to counter
 	RET
 
-	;; ----- EVERTHING ELSE IN THIS FUNCTION BELOW LOOKS LIKE IT CAN BE DELETE -----
-
-	;LDI R22, 100           ;Load a counter variable to limit initialization time
-    ;RETRY: RJMP QDELAY     
-		   ;DEC R22         ;Decrement time
-		   ;BRNE CHECK_SW1
-		   ;SBIC PINA, 7    ;checks to see if button is pressed
-	       ;RJMP RETRY
-	;INC R21                ;increments initial value if button is pressed
-	;DEC R22                ;Decrement time
-	;BRNE CHECK_SW1
-	;CALL SET_LEDS          ;displays new value to LEDs
-	;RET
-
-;SET_LED2:	       ; Turns on the LEDs according to value stored in R22 (The initial val register) 
-;	MOV R18, R21   ; R18 is used as a temporary register to store the count value
-;	COM R18        ; Takes Ones compliment because LEDs are active low
-;	OUT PORTD, R18 ; Turns LEDs on 
-;	RJMP RETRY
-
-;; ---------------------------------------------------------------------------------
-	
 CHG_INC:		; Increments the increment value by 1 or resets to 1
 	INC R17
 	DEC R20
 	BREQ RESET2
 	CALL SET_LEDS
 	RET
-	
+
 	RESET2:		; Resets the increment value to 1 and count to 5
 		LDI R20, 0x05
 		LDI R17, 0x01
@@ -217,7 +195,7 @@ STOPWATCH_MODE:
 			SBIC PINA, 6 ; Skip next instruction if PA1 gets a 0
 			RJMP L2
 			RJMP WAIT
-    
+
 	STOP_RESET:
 		CBI PORTD, 7 ; LED 6 already being used
 		SBIC PINA, 4 ; Skip next instruction if PA2 gets a 0
@@ -225,11 +203,11 @@ STOPWATCH_MODE:
 		CALL RESET_COUNT
 		CALL SET_LEDS
 		CBI PORTD, 7 ; LED 6 already being used
-	
+
 	WAIT:
 		CBI PORTD, 7 ; LED 6 already being used
 		CALL QDELAY
-	
+
 	EXIT_STOPWATCH:
 		SBIC PINA, 7 ; Skip next instruction if PA2 gets a 0
 		RJMP UP
@@ -239,18 +217,18 @@ STOPWATCH_MODE:
 		SBI PORTD, 7 ; LRF1 TURNED OFF
 		CALL QDELAY
 		RET
-	
 
-QDELAY: 
+
+QDELAY:
 	LDI R23, 255
 	AGAIN3:
 		LDI R22, 255
 		AGAIN2:
 			LDI R21, 10 ; set to 10 to spped up testing; calculated in report at 25
 			AGAIN1:
-				NOP 
-				DEC R21 
-				BRNE AGAIN1          
+				NOP
+				DEC R21
+				BRNE AGAIN1
 			DEC R22
 			BRNE AGAIN2
 		DEC R23

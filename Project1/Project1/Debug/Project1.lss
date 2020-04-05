@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.7  C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm Fri Apr 03 21:27:33 2020
+AVRASM ver. 2.2.7  C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1\Project1\main.asm Sun Apr 05 08:44:37 2020
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\avrasm\inc\m324PBdef.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\avrasm\inc\m324PBdef.inc'
@@ -1622,7 +1622,7 @@ AVRASM ver. 2.2.7  C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1
                                  ; Project1.asm
                                  ;
                                  ; Created: 4/2/2020 1:10:17 PM
-                                 ; Author : Adam
+                                 ; Author : Saul Lynn, Shane McEnaney, Pamela Petterchak, Adam Sawyer
                                  ;
                                  
 000000 e000                      LDI R16, 0x00 ;Set register 16 to 0 initially. This register will store the current count.
@@ -1631,110 +1631,219 @@ AVRASM ver. 2.2.7  C:\Users\Pamela Petterchak\Documents\GitHub\Project1\Project1
 000003 e030                      LDI R19, 0x00
 000004 e045                      LDI R20, 0x05 ;Set register 20 to 5 initially. This register will count the change in increment amount.
 000005 e050                      LDI R21, 0x00 ;Set register 22 to 0 initially. This register will hold the initial value
+000006 e1af                      LDI R26, 0x1F
                                  
-000006 b92a                      OUT DDRD, R18 ;Port D in output mode
-000007 b92b                      OUT PORTD, R18 ;Turn off LEDS (active low)
+000007 b92a                      OUT DDRD, R18 ;Port D in output mode
+000008 b92b                      OUT PORTD, R18 ;Turn off LEDS (active low)
                                  
-000008 b92d                      OUT DDRE, R18 ;Port E in output mode
+000009 b92d                      OUT DDRE, R18 ;Port E in output mode
                                  
-000009 b931                      OUT DDRA, R19 ; Port A in input mode
-00000a b922                      OUT PORTA, R18
+00000a b931                      OUT DDRA, R19 ; Port A in input mode
+00000b b922                      OUT PORTA, R18 ; enable pull-ups on PA
                                  
-                                 SET_INIT_VAL:
-00000b e664                      	LDI R22, 100           ;Load a counter variable to limit initialization time
-00000c c035                          RETRY: RJMP QDELAY     
-00000d 956a                      		   DEC R22         ;Decrement time
-00000e f451                      		   BRNE CHECK_SW1
-00000f 9902                      		   SBIC PINA, 2    ;checks to see if button is pressed
-000010 cffb                      	       RJMP RETRY
-000011 9553                      	INC R21                ;increments initial value if button is pressed
-000012 956a                      	DEC R22                ;Decrement time
-000013 f429                      	BRNE CHECK_SW1
-000014 c000                      	RJMP SET_LED2          ;displays new value to LEDs
+                                 INIT:
+                                 	WAIT_UNTIL_REL0: ; Waits until release of button to continue
+00000c 9b04                      		SBIS PINA, 4 ; Skip next instruction if PA3 gets a 0
+00000d cffe                      		RJMP WAIT_UNTIL_REL0
+00000e 940e 0065                 	CALL SET_INIT_VAL
+000010 940e 0057                 	CALL SET_LEDS
+000012 940e 00a7                 	CALL QDELAY
                                  
-                                 SET_LED2:	       ; Turns on the LEDs according to value stored in R22 (The initial val register) 
-000015 2f25                      	MOV R18, R21   ; R18 is used as a temporary register to store the count value
-000016 9520                      	COM R18        ; Takes Ones compliment because LEDs are active low
-000017 b92b                      	OUT PORTD, R18 ; Turns LEDs on 
-000018 cff3                      	RJMP RETRY
-                                 		 
-                                 CHECK_SW1:
-000019 9900                          SBIC PINA, 0 ; Skip next instruction if PA0 gets a 0
-00001a c001                          RJMP CHECK_SW2
-00001b c006                          RJMP INC_CNT
+                                 MAIN:
+                                 	CHECK_UP:
+000014 9905                      		SBIC PINA, 5 ; Skip next instruction if PA0 gets a 0
+000015 c009                      		RJMP CHECK_DOWN
+000016 170a                      		CP R16, R26
+000017 f121                      		BREQ COUNT_MAX
+000018 940e 0052                 		CALL INC_CNT
+00001a 940e 0057                 		CALL SET_LEDS
+00001c 940e 00a7                 		CALL QDELAY
+00001e cff5                      		RJMP MAIN
                                  
-                                 CHECK_SW2:
-00001c 9901                      	SBIC PINA, 1 ; Skip next instruction if PA1 gets a 0
-00001d c001                          RJMP CHECK_SW3
-00001e c005                          RJMP DEC_CNT
+                                 	CHECK_DOWN:
+00001f 9906                      		SBIC PINA, 6 ; Skip next instruction if PA1 gets a 0
+000020 c009                      		RJMP CHECK_RESET
+000021 1730                      		CP R19, R16
+000022 f111                      		BREQ COUNT_MIN
+000023 940e 0054                 		CALL DEC_CNT
+000025 940e 0057                 		CALL SET_LEDS
+000027 940e 00a7                 		CALL QDELAY
+000029 cfea                      		RJMP MAIN
                                      
-                                 CHECK_SW3:
-00001f 9902                      	SBIC PINA, 2 ; Skip next instruction if PA2 gets a 0
-000020 c00a                      	RJMP CHG_INC
-000021 c010                      	RJMP SET_LED
+                                 	CHECK_RESET:
+00002a 9904                      		SBIC PINA, 4 ; Skip next instruction if PA2 gets a 0
+00002b c007                      		RJMP CHECK_STOPWATCH_MODE
+00002c 940e 004e                 		CALL RESET_COUNT
+00002e 940e 0057                 		CALL SET_LEDS
+000030 940e 00a7                 		CALL QDELAY
+000032 cfe1                      		RJMP MAIN
+                                 
+                                 	CHECK_STOPWATCH_MODE:
+000033 9907                      		SBIC PINA, 7 ; Skip next instruction if PA2 gets a 0
+000034 cfdf                      		RJMP MAIN
+                                 		WAIT_UNTIL_REL:
+000035 9b07                      			SBIS PINA, 7 ; Skip next instruction if PA2 gets a 0
+000036 cffe                      			RJMP WAIT_UNTIL_REL
+000037 940e 00a7                 		CALL QDELAY
+000039 940e 006f                 		CALL STOPWATCH_MODE
+00003b cfd8                      		RJMP MAIN
+                                 
+                                 	;;;;;;;;;;;;;;;;;;;;;;;;;;;;; CALL CUSTOM FUNCTIONS HERE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                 
+                                 	;CHECK_CUSTOM1
+                                 		;CALL CUSTOM1
+                                 
+                                 	;CHECK_CUSTOM2
+                                 		;CALL CUSTOM2
+                                 
+                                 	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                 
+                                 	COUNT_MAX:
+00003c 940e 004e                 		CALL RESET_COUNT
+00003e 940e 0057                 		CALL SET_LEDS
+000040 940e 005b                 		CALL SYS_ALARM
+000042 940e 00a7                 		CALL QDELAY
+000044 cfcf                      		RJMP MAIN
+                                 
+                                 	COUNT_MIN:
+000045 940e 0050                 		CALL SET_COUNT
+000047 940e 0057                 		CALL SET_LEDS
+000049 940e 005b                 		CALL SYS_ALARM
+00004b 940e 00a7                 		CALL QDELAY
+00004d cfc6                      		RJMP MAIN
+                                 		
+                                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; COMMON FUNCTIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                 
+                                 RESET_COUNT:
+00004e 2f03                      	MOV R16, R19
+00004f 9508                      	RET
+                                 
+                                 SET_COUNT:
+000050 2f0a                      	MOV R16, R26
+000051 9508                      	RET
                                  
                                  INC_CNT:		 ; Increases the count by the value of the counter
-000022 0f01                      	ADD R16, R17
-000023 c002                      	RJMP CHK_VAL
+000052 0f01                      	ADD R16, R17
+000053 9508                      	RET
                                  
                                  DEC_CNT:		 ; Decreases the count by the value of the counter
-000024 1b01                      	SUB R16, R17
-000025 c000                      	RJMP CHK_VAL
+000054 0f02                      	ADD R16, R18
+000055 9488                      	CLC
+000056 9508                      	RET
                                  
-                                 CHK_VAL:		 ; Checks if max value has been reached
-000026 9b4f                      	SBIS PIND, 7
-000027 c00e                      	RJMP AT_MIN
-000028 9b4d                      	SBIS PIND, 5
-000029 c00e                      	RJMP AT_MAX
-00002a c007                      	RJMP SET_LED
+                                 SET_LEDS:	       ; Turns on the LEDs according to value stored in R16 (The count register) ; Turns on the LEDs according to value stored in R22 (The initial val register) 
+000057 2fb0                      	MOV R27, R16   ; R18 is used as a temporary register to store the count value
+000058 95b0                      	COM R27        ; Takes Ones compliment because LEDs are active low
+000059 b9bb                      	OUT PORTD, R27 ; Turns LEDs on 
+00005a 9508                      	RET
+                                 
+                                 SYS_ALARM:		 ; Sets off the system alarm
+00005b e092                      	LDI R25, 2
+                                 	LOOP1:
+00005c b92e                      		OUT PORTE, R18
+00005d 940e 00a7                 		CALL QDELAY
+00005f b93e                      	    OUT PORTE, R19
+000060 940e 00a7                 	    CALL QDELAY
+000062 959a                      	    DEC R25
+000063 f7c1                      	    BRNE LOOP1
+000064 9508                      	RET
+                                 
+                                 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; CALL CUSTOM FUNCTIONS HERE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                 
+                                 SET_INIT_VAL:
+000065 b150                      	IN R21, PINA 
+000066 2f05                      	MOV R16, R21   ;Copy initial value to counter
+000067 9508                      	RET
                                  	
                                  CHG_INC:		; Increments the increment value by 1 or resets to 1
-00002b 9513                      	INC R17
-00002c 954a                      	DEC R20
-00002d f009                      	BREQ RESET
-00002e c003                      	RJMP SET_LED
+000068 9513                      	INC R17
+000069 954a                      	DEC R20
+00006a f009                      	BREQ RESET2
+                                 	;CALL SET_LED
+00006b 9508                      	RET
                                  	
-                                 	RESET:		; Resets the increment value to 1 and count to 5
-00002f e045                      		LDI R20, 0x05
-000030 e011                      		LDI R17, 0x01
-000031 c000                      		RJMP SET_LED
+                                 	RESET2:		; Resets the increment value to 1 and count to 5
+00006c e045                      		LDI R20, 0x05
+00006d e011                      		LDI R17, 0x01
+                                 		;CALL SET_LED
+00006e 9508                      		RET
                                  
-                                 SET_LED:	       ; Turns on the LEDs according to value stored in R16 (The count register) 
-000032 2f20                      	MOV R18, R16   ; R18 is used as a temporary register to store the count value
-000033 9520                      	COM R18        ; Takes Ones compliment because LEDs are active low
-000034 b92b                      	OUT PORTD, R18 ; Turns LEDs on 
-000035 cfe3                      	RJMP CHECK_SW1
+                                 STOPWATCH_MODE:
+00006f 940e 004e                 	CALL RESET_COUNT
+000071 940e 0057                 	CALL SET_LEDS
+000073 985f                      	CBI PORTD, 7 ;
+                                 	UP:
+000074 9905                      		SBIC PINA, 5 ; Skip next instruction if PA0 gets a 0
+000075 c00e                      		RJMP DOWN
+                                 		WAIT_UNTIL_REL1:
+000076 9b05                      			SBIS PINA, 5 ; Skip next instruction if PA2 gets a 0
+000077 cffe                      			RJMP WAIT_UNTIL_REL1
+                                 		L1:
+000078 170a                      			CP R16, R26
+000079 f0d1                      			BREQ STOP_RESET
+00007a 940e 0052                 			CALL INC_CNT
+00007c 940e 0057                 			CALL SET_LEDS
+00007e 985f                      			CBI PORTD, 7 ; LED 6 already being used
+00007f 940e 00a7                 			CALL QDELAY
+000081 9905                      			SBIC PINA, 5 ; Skip next instruction if PA0 gets a 0
+000082 cff5                      			RJMP L1
+000083 c018                      			RJMP WAIT
                                  
-                                 AT_MIN:			 ; Sets value of counter to 31
-000036 e10f                      	LDI R16, 0x1F
-000037 c002                      	RJMP SYS_ALRM
-                                 
-                                 AT_MAX:			 ; Sets value of counter to 0
-000038 e000                      	LDI R16, 0x00
-000039 c000                      	RJMP SYS_ALRM
-                                 
-                                 SYS_ALRM:		 ; Sets off the system alarm
-00003a e352                      	LDI R21, 50
-00003b b92e                      	LOOP1: OUT PORTE, R18
-00003c c005                      		   RJMP QDELAY
-00003d b93e                      	       OUT PORTE, R19
-00003e c003                      	       RJMP QDELAY
-00003f 955a                      	       DEC R21
-000040 f6c1                      	       BRNE CHECK_SW1
-000041 cff9                      	       RJMP LOOP1
+                                 	DOWN:
+000084 9906                      		SBIC PINA, 6 ; Skip next instruction if PA1 gets a 0
+000085 c00e                      		RJMP STOP_RESET
+                                 		WAIT_UNTIL_REL2:
+000086 9b06                      			SBIS PINA, 6 ; Skip next instruction if PA2 gets a 0
+000087 cffe                      			RJMP WAIT_UNTIL_REL2
+                                 		L2:
+000088 1730                      			CP R19, R16
+000089 f051                      			BREQ STOP_RESET
+00008a 940e 0054                 			CALL DEC_CNT
+00008c 940e 0057                 			CALL SET_LEDS
+00008e 985f                      			CBI PORTD, 7 ; LED 6 already being used
+00008f 940e 00a7                 			CALL QDELAY
+000091 9906                      			SBIC PINA, 6 ; Skip next instruction if PA1 gets a 0
+000092 cff5                      			RJMP L2
+000093 c008                      			RJMP WAIT
+                                     
+                                 	STOP_RESET:
+000094 985f                      		CBI PORTD, 7 ; LED 6 already being used
+000095 9904                      		SBIC PINA, 4 ; Skip next instruction if PA2 gets a 0
+000096 c008                      		RJMP EXIT_STOPWATCH
+000097 940e 004e                 		CALL RESET_COUNT
+000099 940e 0057                 		CALL SET_LEDS
+00009b 985f                      		CBI PORTD, 7 ; LED 6 already being used
+                                 	
+                                 	WAIT:
+00009c 985f                      		CBI PORTD, 7 ; LED 6 already being used
+00009d 940e 00a7                 		CALL QDELAY
+                                 	
+                                 	EXIT_STOPWATCH:
+00009f 9907                      		SBIC PINA, 7 ; Skip next instruction if PA2 gets a 0
+0000a0 cfd3                      		RJMP UP
+                                 		WAIT_UNTIL_REL3:
+0000a1 9b07                      			SBIS PINA, 7 ; Skip next instruction if PA2 gets a 0
+0000a2 cffe                      			RJMP WAIT_UNTIL_REL3
+0000a3 9a5f                      		SBI PORTD, 7 ; LRF1 TURNED OFF
+0000a4 940e 00a7                 		CALL QDELAY
+0000a6 9508                      		RET
                                  	
                                  
                                  QDELAY: 
-000042 ef7f                      	LDI R23, 255
-000043 ef6f                      	AGAIN3: LDI R22, 255
-000044 e159                      			AGAIN2:LDI R21, 25 
-000045 0000                      				AGAIN1:NOP 
-000046 955a                      					   DEC R21 
-000047 f7e9                      					   BRNE AGAIN1          
-000048 956a                      				DEC R22
-000049 f7d1                      				BRNE AGAIN2
-00004a 957a                      			DEC R23
-00004b f7b9                      			BRNE AGAIN3
+0000a7 ef7f                      	LDI R23, 255
+                                 	AGAIN3:
+0000a8 ef6f                      		LDI R22, 255
+                                 		AGAIN2:
+0000a9 e05a                      			LDI R21, 10 ; set to 10 to spped up testing; calculated in report at 25
+                                 			AGAIN1:
+0000aa 0000                      				NOP 
+0000ab 955a                      				DEC R21 
+0000ac f7e9                      				BRNE AGAIN1          
+0000ad 956a                      			DEC R22
+0000ae f7d1                      			BRNE AGAIN2
+0000af 957a                      		DEC R23
+0000b0 f7b9                      		BRNE AGAIN3
+0000b1 9508                      	RET
 
 
 RESOURCE USE INFORMATION
@@ -1754,37 +1863,37 @@ counted separately from r26..r31 here.
 "ATmega324PB" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:   6 r17:   5 r18:  12 r19:   3 r20:   3 
-r21:   7 r22:   5 r23:   2 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
+r13:   0 r14:   0 r15:   0 r16:  11 r17:   4 r18:   7 r19:   6 r20:   3 
+r21:   5 r22:   2 r23:   2 r24:   0 r25:   2 r26:   4 r27:   3 r28:   0 
 r29:   0 r30:   0 r31:   0 
-Registers used: 8 out of 35 (22.9%)
+Registers used: 11 out of 35 (31.4%)
 
 "ATmega324PB" instruction use summary:
-.lds  :   0 .sts  :   0 adc   :   0 add   :   1 adiw  :   0 and   :   0 
+.lds  :   0 .sts  :   0 adc   :   0 add   :   2 adiw  :   0 and   :   0 
 andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
-brcc  :   0 brcs  :   0 break :   0 breq  :   1 brge  :   0 brhc  :   0 
+brcc  :   0 brcs  :   0 break :   0 breq  :   5 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
-brne  :   6 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   0 cbr   :   0 
-clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   0 cls   :   0 
-clt   :   0 clv   :   0 clz   :   0 com   :   2 cp    :   0 cpc   :   0 
-cpi   :   0 cpse  :   0 dec   :   7 eor   :   0 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   2 jmp   :   0 
-ld    :   0 ldd   :   0 ldi   :  15 lds   :   0 lpm   :   0 lsl   :   0 
-lsr   :   0 mov   :   2 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   1 or    :   0 ori   :   0 out   :   9 pop   :   0 
-push  :   0 rcall :   0 ret   :   0 reti  :   0 rjmp  :  23 rol   :   0 
-ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   4 sbis  :   2 
+brne  :   4 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  :  36 cbi   :   6 cbr   :   0 
+clc   :   1 clh   :   0 cli   :   0 cln   :   0 clr   :   0 cls   :   0 
+clt   :   0 clv   :   0 clz   :   0 com   :   1 cp    :   4 cpc   :   0 
+cpi   :   0 cpse  :   0 dec   :   5 eor   :   0 fmul  :   0 fmuls :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   1 inc   :   1 jmp   :   0 
+ld    :   0 ldd   :   0 ldi   :  13 lds   :   0 lpm   :   0 lsl   :   0 
+lsr   :   0 mov   :   4 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
+neg   :   0 nop   :   1 or    :   0 ori   :   0 out   :   8 pop   :   0 
+push  :   0 rcall :   0 ret   :  11 reti  :   0 rjmp  :  23 rol   :   0 
+ror   :   0 sbc   :   0 sbci  :   0 sbi   :   1 sbic  :  10 sbis  :   5 
 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   0 seh   :   0 
 sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   0 
-sub   :   1 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 14 out of 113 (12.4%)
+sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
+Instructions used: 20 out of 113 (17.7%)
 
 "ATmega324PB" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000098    152      0    152   32768   0.5%
+[.cseg] 0x000000 0x000164    356      0    356   32768   1.1%
 [.dseg] 0x000100 0x000100      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
