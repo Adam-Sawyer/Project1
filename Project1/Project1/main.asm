@@ -27,6 +27,9 @@ INIT:
 	WAIT_UNTIL_REL0: ; Waits until release of button to continue
 		SBIS PINA, 4 ; Skip next instruction if PA2 gets a 0
 		RJMP WAIT_UNTIL_REL0
+	WAIT_UNTIL_REL00: ; Waits until release of button to continue
+		SBIS PINA, 2 ; Skip next instruction if PA2 gets a 0
+		RJMP WAIT_UNTIL_REL00
 	CALL QDELAY
 
 MAIN:
@@ -52,9 +55,16 @@ MAIN:
     
 	CHECK_RESET:
 		SBIC PINA, 4 ; Skip next instruction if PA2 gets a 0
-		RJMP CHECK_STOPWATCH_MODE
+		RJMP CHECK_CHG_INC
 		CALL RESET_COUNT
 		CALL SET_LEDS
+		CALL QDELAY
+		RJMP MAIN
+
+	CHECK_CHG_INC:
+		SBIC PINA, 2 ; Skip next instruction if PA2 gets a 0
+		RJMP CHECK_STOPWATCH_MODE
+		CALL CHG_INC
 		CALL QDELAY
 		RJMP MAIN
 
@@ -161,13 +171,13 @@ CHG_INC:		; Increments the increment value by 1 or resets to 1
 	INC R17
 	DEC R20
 	BREQ RESET2
-	;CALL SET_LED
+	CALL SET_LEDS
 	RET
 	
 	RESET2:		; Resets the increment value to 1 and count to 5
 		LDI R20, 0x05
 		LDI R17, 0x01
-		;CALL SET_LED
+		CALL SET_LEDS
 		RET
 
 STOPWATCH_MODE:
