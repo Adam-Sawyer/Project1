@@ -112,7 +112,7 @@ DEC_CNT:		 ; Decreases the count by the value of the counter
 	ADD R16, R18
 	CLC
 	RET
-					; Turns on the LEDs according to value stored in R22 (The initial val register)
+
 SET_LEDS:	       ; Turns on the LEDs according to value stored in R16 (The count register) 
 	MOV R27, R16   ; R27 is used as a temporary register to store the count value
 	COM R27        ; Takes Ones compliment because LEDs are active low
@@ -130,7 +130,7 @@ SYS_ALARM:		 ; Sets off the system alarm
 	    BRNE LOOP1
 	RET
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; CALL CUSTOM FUNCTIONS HERE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; CUSTOM FUNCTIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 SET_INIT_VAL:
 	IN R16, PINA
@@ -165,7 +165,7 @@ STOPWATCH_MODE:
 			BREQ STOP_RESET
 			CALL INC_CNT
 			CALL SET_LEDS
-			CBI PORTD, 7 ; LED 6 already being used
+			CBI PORTD, 7
 			CALL QDELAY
 			SBIC PINA, 5 ; Skip next instruction if button7 gets a 0
 			RJMP L1
@@ -182,7 +182,7 @@ STOPWATCH_MODE:
 			BREQ STOP_RESET
 			CALL DEC_CNT
 			CALL SET_LEDS
-			CBI PORTD, 7 ; LED 6 already being used
+			CBI PORTD, 7
 			CALL QDELAY
 			SBIC PINA, 6 ; Skip next instruction if button8 gets a 0
 			RJMP L2
@@ -194,10 +194,10 @@ STOPWATCH_MODE:
 		RJMP EXIT_STOPWATCH
 		CALL RESET_COUNT
 		CALL SET_LEDS
-		CBI PORTD, 7 ; LED 6 already being used
+		CBI PORTD, 7
 
 	WAIT:
-		CBI PORTD, 7 ; LED 6 already being used
+		CBI PORTD, 7
 		CALL QDELAY
 
 	EXIT_STOPWATCH:
@@ -216,7 +216,7 @@ QDELAY:
 	AGAIN3:
 		LDI R22, 255
 		AGAIN2:
-			LDI R21, 10 ; set to 10 to spped up testing; calculated in report at 25
+			LDI R21, 25 ; was set to 10 to speed up testing; calculated in report at 25
 			AGAIN1:
 				NOP
 				DEC R21
